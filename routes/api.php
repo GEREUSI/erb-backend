@@ -18,7 +18,6 @@ Route::group(['middleware' => ['api'], 'prefix' => 'v1'], function () {
     });
 
     Route::apiResource('user', UserController::class)
-        ->middleware('jwt.verify')
         ->only('index', 'update', 'destroy', 'show');
 });
 

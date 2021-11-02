@@ -20,6 +20,7 @@ class UserController extends Controller
         private UserRepositoryInterface $userRepository,
         private ResponseFactory $responseFactory
     ) {
+        $this->middleware('jwt.verify');
     }
 
     public function index(): JsonResponse
