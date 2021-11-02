@@ -8,12 +8,13 @@ use Illuminate\Support\Facades\Schema;
 
 class AddDataColumnsToUsersTable extends Migration
 {
-
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('birthdayDate')->nullable(true);
-            $table->string('fullName')->nullable(true);
+            $table->string('firstName')->nullable(true);
+            $table->string('lastName')->nullable(true);
+
         });
     }
 
@@ -21,7 +22,8 @@ class AddDataColumnsToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('birthdayDate');
-            $table->dropColumn('fullName');
+            $table->dropColumn('firstName');
+            $table->dropColumn('lastName');
         });
     }
 }

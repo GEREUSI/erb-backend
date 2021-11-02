@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-Route::group(['middleware' => ['api', 'jwt.verify'], 'prefix' => 'v1'], function () {
+Route::group(['middleware' => ['api'], 'prefix' => 'v1'], function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('register', [AuthController::class, 'register']);
@@ -17,7 +17,9 @@ Route::group(['middleware' => ['api', 'jwt.verify'], 'prefix' => 'v1'], function
         Route::post('me', [AuthController::class, 'me']);
     });
 
-    Route::apiResource('user', UserController::class)->only('index', 'update', 'destroy', 'show');
+    Route::apiResource('user', UserController::class)
+        ->middleware('jwt.verify')
+        ->only('index', 'update', 'destroy', 'show');
 });
 
 Route::any(
