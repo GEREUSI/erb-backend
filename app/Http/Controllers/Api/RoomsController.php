@@ -78,7 +78,9 @@ class RoomsController extends Controller
 
     public function edit(User $user, Room $room): JsonResponse
     {
-        return $this->responseFactory->json(new RoomResource($room), Response::HTTP_OK);
+        return $this->responseFactory->json([
+            'room' => new RoomResource($room),
+        ], Response::HTTP_OK);
     }
 
     public function update(RoomStoreRequest $request, User $user, Room $room): JsonResponse
@@ -96,7 +98,7 @@ class RoomsController extends Controller
             return $this->responseFactory->json([
                 'status' => 'ok',
                 'message' => 'Room has been updated.',
-            ], Response::HTTP_CREATED);
+            ], Response::HTTP_ACCEPTED);
         }
 
         return $this->responseFactory->json([
