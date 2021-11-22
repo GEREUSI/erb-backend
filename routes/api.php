@@ -26,6 +26,9 @@ Route::group(['middleware' => ['api'], 'prefix' => 'v1'], function () {
 
         Route::post('/{user}/rooms', [RoomsController::class, 'create']);
         Route::get('/{user}/rooms', [RoomsController::class, 'show']);
+
+        Route::get('/{user}/rooms/{room}', [RoomsController::class, 'edit']);
+        Route::patch('/{user}/rooms/{room}', [RoomsController::class, 'update']);
     });
 
     Route::get('/rooms', [RoomsController::class, 'index']);

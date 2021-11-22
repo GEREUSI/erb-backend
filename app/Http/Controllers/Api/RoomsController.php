@@ -19,7 +19,7 @@ class RoomsController extends Controller
 {
     public function __construct(
         private RoomRepositoryInterface $repository,
-        private ResponseFactory         $responseFactory
+        private ResponseFactory $responseFactory
     ) {
         $this->middleware('jwt.verify');
     }
@@ -31,7 +31,7 @@ class RoomsController extends Controller
 
         if (!empty($query['roomType'])) {
             $roomTypes = explode(',', $query['roomType']);
-            $rooms = $rooms->filter(function(Room $room) use($roomTypes): bool {
+            $rooms = $rooms->filter(function (Room $room) use ($roomTypes): bool {
                 return in_array($room->typeId, $roomTypes, true);
             });
         }
@@ -74,5 +74,34 @@ class RoomsController extends Controller
             'status' => 'ok',
             'rooms' => RoomResource::collection($user->rooms()->get()),
         ], Response::HTTP_OK);
+    }
+
+    public function edit(User $user, Room $room): JsonResponse
+    {
+        return $this->responseFactory->json(new RoomResource($room), Response::HTTP_OK);
+    }
+
+    public function update(RoomStoreRequest $request, User $user, Room $room): JsonResponse
+    {
+        try {
+            $validated = $request->validated();
+        } catch (ValidationException $exception) {
+            return $this->responseFactory->json([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($this->repository->update($room->id, $validated)) {
+            return $this->responseFactory->json([
+                'status' => 'ok',
+                'message' => 'Room has been updated.',
+            ], Response::HTTP_CREATED);
+        }
+
+        return $this->responseFactory->json([
+            'status' => 'error',
+            'message' => 'Something went wrong while updating user.',
+        ], Response::HTTP_BAD_REQUEST);
     }
 }
