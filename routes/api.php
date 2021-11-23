@@ -31,7 +31,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'v1'], function () {
         Route::patch('/{user}/rooms/{room}', [RoomsController::class, 'update']);
     });
 
-    Route::get('/rooms', [RoomsController::class, 'index']);
+    Route::get('/rooms', [RoomsController::class, 'index'])->withoutMiddleware('jwt.verify');
 });
 
 Route::any(
