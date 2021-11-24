@@ -6,25 +6,22 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRoomsTable extends Migration
+class CreateRatingsTable extends Migration
 {
+
     public function up(): void
     {
-        Schema::create('rooms', function (Blueprint $table) {
+        Schema::create('ratings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('room_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('title');
-            $table->string('address');
-            $table->string('size');
-            $table->text('description');
-            $table->integer('price');
-            $table->string('typeId');
+            $table->integer('rate');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('rooms');
+        Schema::dropIfExists('ratings');
     }
 }

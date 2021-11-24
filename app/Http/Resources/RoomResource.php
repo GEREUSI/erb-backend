@@ -22,6 +22,7 @@ class RoomResource extends JsonResource
             'description' => $this->description,
             'price' => $this->price,
             'typeId' => $this->typeId,
+            'avgRate' => $this->avgRating(),
         ];
     }
 }

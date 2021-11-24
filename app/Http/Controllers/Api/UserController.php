@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
+use App\Http\Resources\UserReservationsResource;
 use App\Http\Resources\UserResource;
 use App\Models\Account\User;
 use App\Repository\UserRepositoryInterface;
@@ -77,5 +78,16 @@ class UserController extends Controller
             'status' => 'error',
             'message' => 'Something went wrong..',
         ], Response::HTTP_BAD_REQUEST);
+    }
+
+    public function reservations(User $user): JsonResponse
+    {
+        return $this->responseFactory
+            ->json(
+                UserReservationsResource::collection(
+                    $user->reservations()
+                        ->get()
+                )
+            );
     }
 }

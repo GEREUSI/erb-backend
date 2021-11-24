@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\RoomsController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\JsonResponse;
@@ -29,9 +30,23 @@ Route::group(['middleware' => ['api'], 'prefix' => 'v1'], function () {
 
         Route::get('/{user}/rooms/{room}', [RoomsController::class, 'edit']);
         Route::patch('/{user}/rooms/{room}', [RoomsController::class, 'update']);
+
+        Route::get('/{user}/rooms/{room}/reservations', [RoomsController::class, 'reservations']);
+
+        Route::post('/reservations/{reservation}', [RoomsController::class, 'updateStatus']);
+
+        Route::get('/reservations', [UserController::class, 'reservations']);
     });
 
     Route::get('/rooms', [RoomsController::class, 'index'])->withoutMiddleware('jwt.verify');
+
+    Route::group(['prefix' => 'room'], function () {
+       Route::get('/{room}', [RoomController::class, 'show'])
+        ->withoutMiddleware('jwt.verify');
+       Route::post('/{room}/rate', [RoomController::class, 'rate']);
+       Route::post('/{room}/reserve', [RoomController::class, 'reserve']);
+       Route::get('/{room}/booked', [RoomController::class, 'bookedTimes']);
+    });
 });
 
 Route::any(

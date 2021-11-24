@@ -4,9 +4,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReservationStatusUpdateRequest;
 use App\Http\Requests\RoomStoreRequest;
+use App\Http\Resources\ReservationResource;
 use App\Http\Resources\RoomResource;
 use App\Models\Account\User;
+use App\Models\Order\Reservation;
 use App\Models\Room\Room;
 use App\Repository\RoomRepositoryInterface;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -104,6 +107,38 @@ class RoomsController extends Controller
         return $this->responseFactory->json([
             'status' => 'error',
             'message' => 'Something went wrong while updating user.',
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    public function reservations(User $user, Room $room): JsonResponse
+    {
+        $reservations = Reservation::where('user_id', $user->id)
+            ->where('room_id', $room->id)
+            ->get();
+
+        return $this->responseFactory->json(
+            ReservationResource::collection($reservations)
+        );
+    }
+
+    public function updateStatus(
+        ReservationStatusUpdateRequest $request,
+        Reservation $reservation
+    ): JsonResponse {
+        try {
+            $validated = $request->validated();
+        } catch (ValidationException $exception) {
+            return $this->responseFactory->json([
+                'message' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($reservation->update($validated)) {
+            return $this->responseFactory->json(new ReservationResource($reservation));
+        }
+
+        return $this->responseFactory->json([
+            'message' => 'Cannot update reservation status',
         ], Response::HTTP_BAD_REQUEST);
     }
 }

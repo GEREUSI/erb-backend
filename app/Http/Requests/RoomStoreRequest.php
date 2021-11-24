@@ -18,7 +18,7 @@ class RoomStoreRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'address' => ['required', 'string'],
-            'size' => ['required', 'integer'],
+            'size' => ['required', 'string'],
             'description' => ['required', 'string'],
             'price' => ['required', 'integer'],
             'typeId' => ['required', 'string']
