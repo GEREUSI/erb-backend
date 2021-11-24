@@ -112,11 +112,8 @@ class RoomsController extends Controller
 
     public function reservations(Room $room): JsonResponse
     {
-        $reservations = Reservation::where('room_id', $room->id)
-            ->get();
-
         return $this->responseFactory->json(
-            ReservationResource::collection($reservations)
+            ReservationResource::collection($room->reservations()->get())
         );
     }
 

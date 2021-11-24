@@ -33,7 +33,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'v1'], function () {
 
         Route::post('/reservations/{reservation}', [RoomsController::class, 'updateStatus']);
 
-        Route::get('/{user}/reservations', [UserController::class, 'reservations']);
+        Route::get('/{room}/reservations', [UserController::class, 'reservations']);
     });
 
     Route::get('/rooms', [RoomsController::class, 'index'])->withoutMiddleware('jwt.verify');
