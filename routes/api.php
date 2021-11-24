@@ -31,11 +31,9 @@ Route::group(['middleware' => ['api'], 'prefix' => 'v1'], function () {
         Route::get('/{user}/rooms/{room}', [RoomsController::class, 'edit']);
         Route::patch('/{user}/rooms/{room}', [RoomsController::class, 'update']);
 
-        Route::get('/{user}/rooms/{room}/reservations', [RoomsController::class, 'reservations']);
-
         Route::post('/reservations/{reservation}', [RoomsController::class, 'updateStatus']);
 
-        Route::get('/reservations', [UserController::class, 'reservations']);
+        Route::get('/{user}/reservations', [UserController::class, 'reservations']);
     });
 
     Route::get('/rooms', [RoomsController::class, 'index'])->withoutMiddleware('jwt.verify');
@@ -46,6 +44,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'v1'], function () {
        Route::post('/{room}/rate', [RoomController::class, 'rate']);
        Route::post('/{room}/reserve', [RoomController::class, 'reserve']);
        Route::get('/{room}/booked', [RoomController::class, 'bookedTimes']);
+       Route::get('/{room}/reservations', [RoomsController::class, 'reservations']);
     });
 });
 

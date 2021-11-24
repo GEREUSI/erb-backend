@@ -11,7 +11,7 @@ class ReservedDatesResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'reservetion_date' => $this->reservation_date,
+            'reservation_date' => $this->reservation_date,
             'status' => $this->status,
         ];
     }

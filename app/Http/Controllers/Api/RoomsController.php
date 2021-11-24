@@ -110,10 +110,9 @@ class RoomsController extends Controller
         ], Response::HTTP_BAD_REQUEST);
     }
 
-    public function reservations(User $user, Room $room): JsonResponse
+    public function reservations(Room $room): JsonResponse
     {
-        $reservations = Reservation::where('user_id', $user->id)
-            ->where('room_id', $room->id)
+        $reservations = Reservation::where('room_id', $room->id)
             ->get();
 
         return $this->responseFactory->json(
