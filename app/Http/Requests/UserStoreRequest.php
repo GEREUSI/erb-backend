@@ -17,8 +17,8 @@ class UserStoreRequest extends FormRequest
             'username' => ['required', 'string'],
             'email' => ['required', 'email'],
             'firstName' => ['string', 'nullable'],
-            'lastName' => ['string' , 'nullable'],
-            'birthdayDate' => ['date'],
+            'lastName' => ['string', 'nullable'],
+            'birthdayDate' => ['date', 'nullable'],
         ];
     }
 }
