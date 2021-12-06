@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ExportsController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\RoomsController;
 use App\Http\Controllers\Api\UserController;
@@ -33,18 +34,28 @@ Route::group(['middleware' => ['api'], 'prefix' => 'v1'], function () {
 
         Route::post('/reservations/{reservation}', [RoomsController::class, 'updateStatus']);
 
-        Route::get('/{room}/reservations', [UserController::class, 'reservations']);
+        Route::group(['prefix' => '/{user}/reservations'], function () {
+            Route::get('/', [UserController::class, 'reservations']);
+            Route::get('/export', [ExportsController::class, 'exportReservations']);
+        });
     });
 
     Route::get('/rooms', [RoomsController::class, 'index'])->withoutMiddleware('jwt.verify');
 
     Route::group(['prefix' => 'room'], function () {
-       Route::get('/{room}', [RoomController::class, 'show'])
-        ->withoutMiddleware('jwt.verify');
-       Route::post('/{room}/rate', [RoomController::class, 'rate']);
-       Route::post('/{room}/reserve', [RoomController::class, 'reserve']);
-       Route::get('/{room}/booked', [RoomController::class, 'bookedTimes']);
-       Route::get('/{room}/reservations', [RoomsController::class, 'reservations']);
+        Route::get('/{room}', [RoomController::class, 'show'])
+            ->withoutMiddleware('jwt.verify');
+        Route::post('/{room}/rate', [RoomController::class, 'rate']);
+        Route::post('/{room}/reserve', [RoomController::class, 'reserve']);
+
+        Route::group(['prefix' => '/{room}/booked'], function () {
+            Route::get('/', [RoomController::class, 'bookedTimes']);
+            Route::get('/export', [ExportsController::class, 'exportBooked']);
+        });
+
+        Route::group(['prefix' => '/{room}/reservations'], function () {
+            Route::get('/', [RoomsController::class, 'reservations']);
+        });
     });
 });
 

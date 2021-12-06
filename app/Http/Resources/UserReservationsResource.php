@@ -11,6 +11,7 @@ class UserReservationsResource extends JsonResource
     public function toArray($request): array
     {
         return [
+            'id' => $this->id,
             'room' => new RoomResource($this->room()->first()),
             'reservation_date' => $this->reservation_date,
             'status' => $this->status,
